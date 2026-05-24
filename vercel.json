@@ -1,0 +1,12 @@
+{
+  "framework": null,
+  "buildCommand": null,
+  "outputDirectory": ".",
+  "installCommand": null,
+  "devCommand": null,
+  "regions": ["iad1"],
+  "routes": [
+    { "handle": "filesystem" },
+    { "handle": "colon" }
+  ]
+}

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | AI Brand Studio - Create Your Account</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <style>
+        .auth-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .auth-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 2rem;
+        }
+        .auth-card {
+            background-color: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            padding: 3rem;
+            width: 100%;
+            max-width: 440px;
+        }
+        .auth-card h1 {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        .auth-card .subtitle {
+            text-align: center;
+            color: var(--muted-text);
+            font-size: 0.9rem;
+            margin-bottom: 2.5rem;
+        }
+        .auth-card .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .auth-card .form-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+            color: var(--muted-text);
+        }
+        .auth-card .form-group label .icon {
+            font-size: 1rem;
+        }
+        .auth-card input {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+        }
+        .auth-card input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        .auth-card input::placeholder {
+            color: #555;
+        }
+        .auth-card .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--accent-color);
+            color: #fff;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-top: 0.5rem;
+        }
+        .auth-card .btn-submit:hover {
+            background-color: #9a6b09;
+            transform: translateY(-2px);
+        }
+        .auth-card .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .auth-card .auth-redirect {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: var(--muted-text);
+        }
+        .auth-card .auth-redirect a {
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+        .auth-card .auth-redirect a:hover {
+            text-decoration: underline;
+        }
+        .auth-card .divider {
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 2rem 0;
+        }
+        .auth-error {
+            display: none;
+            background-color: rgba(255, 50, 50, 0.1);
+            border: 1px solid #ff3232;
+            color: #ff6464;
+            padding: 0.8rem 1rem;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .auth-success {
+            display: none;
+            background-color: rgba(50, 255, 50, 0.1);
+            border: 1px solid #32bb32;
+            color: #64dd64;
+            padding: 0.8rem 1rem;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .password-requirements {
+            font-size: 0.75rem;
+            color: var(--muted-text);
+            margin-top: 0.5rem;
+            padding-left: 0.5rem;
+        }
+        .password-requirements li {
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .password-requirements li::before {
+            content: '○';
+            color: var(--muted-text);
+        }
+        .password-requirements li.valid::before {
+            content: '✓';
+            color: #32bb32;
+        }
+        .auth-footer-text {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #555;
+            margin-top: 1.5rem;
+        }
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="auth-page">
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">AI BRAND <span>STUDIO</span></a>
+                <div class="nav-links">
+                    <a href="services.html">Services</a>
+                    <a href="demo.html">Demo</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="login.html" class="btn btn-outline" style="padding: 0.5rem 1.5rem;">Login</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="auth-main">
+        <div class="auth-card">
+            <h1>Create Account</h1>
+            <p class="subtitle">Begin your brand journey with AI Brand Studio</p>
+
+            <div id="auth-error" class="auth-error"></div>
+            <div id="auth-success" class="auth-success"></div>
+
+            <form id="signup-form" onsubmit="return handleSignup(event)">
+                <div class="form-group">
+                    <label for="email"><span class="icon">✉</span> Email Address</label>
+                    <input type="email" id="email" placeholder="your@brand.com" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="password"><span class="icon">🔒</span> Password</label>
+                    <input type="password" id="password" placeholder="Min. 6 characters" required minlength="6" autocomplete="new-password">
+                    <ul class="password-requirements">
+                        <li id="req-length">At least 6 characters</li>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password"><span class="icon">🔒</span> Confirm Password</label>
+                    <input type="password" id="confirm-password" placeholder="Repeat your password" required autocomplete="new-password">
+                </div>
+
+                <button type="submit" class="btn-submit" id="signup-btn">Create Account</button>
+
+                <hr class="divider">
+
+                <p class="auth-redirect">
+                    Already have an account? <a href="login.html">Log in</a>
+                </p>
+            </form>
+
+            <p class="auth-footer-text">By creating an account, you agree to our Terms of Service.</p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-logo">AI BRAND STUDIO</div>
+            <p class="copyright">&copy; 2026 AI Brand Studio. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Password validation feedback
+        document.getElementById('password').addEventListener('input', function() {
+            const req = document.getElementById('req-length');
+            if (this.value.length >= 6) {
+                req.classList.add('valid');
+            } else {
+                req.classList.remove('valid');
+            }
+        });
+
+        // Handle signup form submission
+        async function handleSignup(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirm-password').value;
+            const btn = document.getElementById('signup-btn');
+
+            // Clear previous messages
+            document.getElementById('auth-error').style.display = 'none';
+            document.getElementById('auth-success').style.display = 'none';
+
+            // Client-side validation
+            if (password.length < 6) {
+                showAuthError('Password must be at least 6 characters.');
+                return false;
+            }
+
+            if (password !== confirm) {
+                showAuthError('Passwords do not match.');
+                return false;
+            }
+
+            // Disable button to prevent double-submit
+            btn.disabled = true;
+            btn.textContent = 'Creating Account...';
+
+            const result = await signUp(email, password);
+            
+            btn.disabled = false;
+            btn.textContent = 'Create Account';
+
+            if (result) {
+                // Check if user needs email confirmation
+                if (result.user && result.user.identities && result.user.identities.length === 0) {
+                    showAuthError('This email is already registered. Please log in instead.');
+                } else if (result.session) {
+                    // Auto-logged in, redirect to dashboard
+                    window.location.href = 'dashboard.html';
+                } else {
+                    // Email confirmation required
+                    showAuthSuccess('Account created! Check your email for a confirmation link before logging in.');
+                    document.getElementById('signup-form').reset();
+                }
+            }
+            // Error display is handled by showAuthError in auth.js
+
+            return false;
+        }
+    </script>
+</body>
+</html>

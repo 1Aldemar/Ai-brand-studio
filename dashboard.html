@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | AI Brand Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/auth.js"></script>
+    <style>
+        /* Dashboard Layout */
+        .dash-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-color);
+        }
+        .dash-main {
+            flex: 1;
+            padding: 3rem 0 6rem;
+        }
+
+        /* Welcome Section */
+        .dash-welcome {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .dash-welcome h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .dash-welcome p {
+            color: var(--muted-text);
+            font-size: 1rem;
+        }
+        .dash-user-meta {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        .dash-user-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--muted-text);
+        }
+        .dash-user-meta-item .label {
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.7rem;
+            color: #666;
+        }
+        .dash-user-meta-item .value {
+            font-weight: 700;
+            color: var(--text-color);
+        }
+        .dash-user-meta-item .tier-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 700;
+        }
+        .dash-user-meta-item .tier-price {
+            font-size: 0.75rem;
+            color: var(--accent-color);
+        }
+
+        /* Section Headers */
+        .dash-section-title {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .dash-section-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 1.3rem;
+            background-color: var(--accent-color);
+        }
+
+        /* Usage Grid */
+        .usage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .usage-card {
+            background-color: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            transition: border-color 0.3s ease;
+        }
+        .usage-card:hover {
+            border-color: var(--accent-color);
+        }
+        .usage-card--exhausted {
+            border-color: #ff3232;
+        }
+        .usage-card--exhausted:hover {
+            border-color: #ff6464;
+        }
+
+        .usage-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+        .usage-card-title {
+            font-size: 0.8rem;
+            color: var(--muted-text);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 700;
+        }
+        .usage-card-badge {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.2rem 0.6rem;
+            border: 1px solid var(--border-color);
+            color: #888;
+        }
+        .badge--exhausted {
+            border-color: #ff3232;
+            color: #ff6464;
+        }
+
+        .usage-card-stats {
+            display: flex;
+            align-items: baseline;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+        }
+        .usage-count {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--text-color);
+            line-height: 1;
+        }
+        .usage-separator {
+            font-size: 1.2rem;
+            color: #555;
+            margin: 0 0.15rem;
+        }
+        .usage-total {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: #555;
+            line-height: 1;
+        }
+        .usage-total.unlimited {
+            font-size: 2rem;
+            color: var(--accent-color);
+        }
+        .usage-label {
+            font-size: 0.7rem;
+            color: var(--muted-text);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-left: 0.25rem;
+            align-self: flex-end;
+            padding-bottom: 0.4rem;
+        }
+
+        /* Progress Bar */
+        .usage-bar-track {
+            height: 4px;
+            background-color: var(--bg-color);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 0.75rem;
+        }
+        .usage-bar-fill {
+            height: 100%;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+        .usage-card--exhausted .usage-bar-fill {
+            background-color: #ff3232;
+        }
+
+        .usage-remaining {
+            font-size: 0.8rem;
+            color: var(--muted-text);
+        }
+        .usage-unlimited-note {
+            font-size: 0.8rem;
+            color: var(--accent-color);
+            font-style: italic;
+        }
+
+        /* Upgrade Prompt */
+        .upgrade-prompt {
+            background-color: var(--secondary-bg);
+            border: 1px solid var(--accent-color);
+            padding: 2.5rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .upgrade-prompt h3 {
+            color: var(--accent-color);
+            margin-bottom: 0.75rem;
+            font-size: 1.3rem;
+        }
+        .upgrade-prompt p {
+            color: var(--muted-text);
+            margin-bottom: 1.5rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .upgrade-prompt .btn {
+            display: inline-block;
+        }
+
+        /* Quick Actions */
+        .dash-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+        .dash-action-card {
+            background-color: var(--secondary-bg);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+        .dash-action-card:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+        .dash-action-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        .dash-action-card h4 {
+            font-size: 0.8rem;
+            color: var(--text-color);
+            margin-bottom: 0.25rem;
+        }
+        .dash-action-card p {
+            font-size: 0.75rem;
+            color: var(--muted-text);
+        }
+        .dash-action-card.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .dash-action-card.disabled:hover {
+            border-color: var(--border-color);
+            transform: none;
+        }
+
+        /* Loading State */
+        .dash-loading {
+            text-align: center;
+            padding: 6rem 2rem;
+        }
+        .dash-loading .spinner {
+            display: inline-block;
+            width: 2rem;
+            height: 2rem;
+            border: 2px solid var(--border-color);
+            border-top-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 1rem;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .dash-loading p {
+            color: var(--muted-text);
+        }
+
+        /* Logout button in header */
+        .logout-link {
+            color: var(--accent-color) !important;
+        }
+
+        @media (max-width: 600px) {
+            .dash-welcome h1 {
+                font-size: 1.5rem;
+            }
+            .usage-grid {
+                grid-template-columns: 1fr;
+            }
+            .dash-actions {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="dash-page">
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">AI BRAND <span>STUDIO</span></a>
+                <div class="nav-links" id="dash-nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="pricing.html">Upgrade</a>
+                    <a href="#" onclick="signOut(); return false;" class="logout-link">Logout</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="dash-main">
+        <div class="container">
+            <!-- Loading State -->
+            <div id="dash-loading" class="dash-loading">
+                <div class="spinner"></div>
+                <p>Loading your dashboard...</p>
+            </div>
+
+            <!-- Dashboard Content (hidden until loaded) -->
+            <div id="dashboard-content" style="display: none;">
+                <!-- Welcome -->
+                <div class="dash-welcome">
+                    <h1>Your Brand Studio</h1>
+                    <p>Track your monthly resources and continue building your label.</p>
+                    <div class="dash-user-meta">
+                        <div class="dash-user-meta-item">
+                            <span class="label">Account</span>
+                            <span class="value" id="user-email">—</span>
+                        </div>
+                        <div class="dash-user-meta-item">
+                            <span class="label">Tier</span>
+                            <span class="tier-badge" id="user-tier">Free</span>
+                            <span class="tier-price" id="user-tier-price">$0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <h2 class="dash-section-title">Quick Actions</h2>
+                <div class="dash-actions">
+                    <div class="dash-action-card" onclick="window.location.href='services.html'">
+                        <div class="dash-action-icon">🎨</div>
+                        <h4>Generate Logo</h4>
+                        <p>Create a new brand mark</p>
+                    </div>
+                    <div class="dash-action-card" onclick="window.location.href='services.html'">
+                        <div class="dash-action-icon">👕</div>
+                        <h4>Create Mockup</h4>
+                        <p>Preview your garment</p>
+                    </div>
+                    <div class="dash-action-card" onclick="window.location.href='services.html'">
+                        <div class="dash-action-icon">📋</div>
+                        <h4>Build Tech Pack</h4>
+                        <p>Manufacturing specs</p>
+                    </div>
+                    <div class="dash-action-card" onclick="window.location.href='services.html'">
+                        <div class="dash-action-icon">📝</div>
+                        <h4>Write Description</h4>
+                        <p>Product copy & SEO</p>
+                    </div>
+                </div>
+
+                <!-- Resource Usage -->
+                <h2 class="dash-section-title">Monthly Resource Usage</h2>
+                <div class="usage-grid" id="usage-grid">
+                    <!-- Generated by JS -->
+                </div>
+
+                <!-- Upgrade Prompt (free tier only) -->
+                <div id="upgrade-prompt" class="upgrade-prompt" style="display: none;">
+                    <h3>Unlock Your Full Potential</h3>
+                    <p>You're currently on the <strong>Free</strong> tier. Upgrade to Starter or higher to get more logo concepts, mockups, and production tools.</p>
+                    <a href="pricing.html" class="btn">View Plans</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-logo">AI BRAND STUDIO</div>
+            <p class="copyright">&copy; 2026 AI Brand Studio. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
