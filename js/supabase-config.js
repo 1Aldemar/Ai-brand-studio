@@ -11,7 +11,7 @@
 
 const SUPABASE_CONFIG = {
     // ⚠️ REPLACE THESE with your actual Supabase project credentials
-    url: 'https://YOUR_PROJECT.supabase.co',
+    url: 'https://ggarquaepdywabliuwlj.supabase.co',
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.YOUR_ANON_KEY_HERE',
     
     // Tier definitions with per-month limits
