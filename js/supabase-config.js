@@ -12,7 +12,7 @@
 const SUPABASE_CONFIG = {
     // ⚠️ REPLACE THESE with your actual Supabase project credentials
     url: 'https://ggarquaepdywabliuwlj.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.YOUR_ANON_KEY_HERE',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdnYXJxdWFlcGR5d2FibGl1d2xqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2NjEwMTQsImV4cCI6MjA5NTIzNzAxNH0.t_Mfg9_I-4qSjKYnG3hKPPhHMiuwmYaT7Xa3eMDyvpc',
     
     // Tier definitions with per-month limits
     tiers: {
