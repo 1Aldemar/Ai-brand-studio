@@ -6,20 +6,18 @@
     <title>Start Your Brand | AI Brand Studio - Intake</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
         <div class="container">
             <nav>
-                <a href="index.html" class="logo">AI BRAND <span>STUDIO</span></a>
+                <a href="index.html" class="logo">AI BRAND STUDIO</a>
                 <div class="nav-links">
                     <a href="services.html">Services</a>
                     <a href="demo.html">Demo</a>
                     <a href="pricing.html">Pricing</a>
-                    <a href="login.html">Login</a>
-                    <a href="signup.html" class="btn btn-outline" style="padding: 0.5rem 1.5rem;">Sign Up</a>
                     <a href="contact.html" class="btn" style="padding: 0.5rem 1.5rem;">Start Your Brand</a>
                 </div>
             </nav>
@@ -29,17 +27,18 @@
     <main style="padding: 8rem 0;">
         <div class="container">
             <h1 class="section-title">Start Your Brand Journey</h1>
-            <p style="text-align: center; color: var(--muted-text); margin-bottom: 4rem; max-width: 600px; margin-left: auto; margin-right: auto;">Fill out the initial intake form below. Our AI systems will begin analyzing your direction immediately.</p>
-            
+            <p style="text-align: center; color: var(--muted); margin-bottom: 3rem;">Fill out the initial intake form below. Our AI systems will begin analyzing your direction immediately.</p>
+
             <form class="contact-form" action="https://formspree.io/f/xlgkonjz" method="POST">
+
                 <div class="form-group">
                     <label for="brand-name">Brand Name (or Placeholder)</label>
-                    <input type="text" id="brand-name" placeholder="e.g. VŌID" required>
+                    <input type="text" id="brand-name" name="brand-name" placeholder="e.g. VŌID" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="aesthetic">Aesthetic Direction</label>
-                    <select id="aesthetic">
+                    <select id="aesthetic" name="aesthetic">
                         <option value="minimal">Minimal / High-Fashion</option>
                         <option value="streetwear">Streetwear / Industrial</option>
                         <option value="luxury">Heritage Luxury</option>
@@ -51,16 +50,16 @@
                 <div class="form-group">
                     <label for="services">Primary Services Needed</label>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem;">
-                        <label style="text-transform: none; font-size: 0.9rem;"><input type="checkbox" style="width: auto; margin-right: 0.5rem;"> Logo Concepts</label>
-                        <label style="text-transform: none; font-size: 0.9rem;"><input type="checkbox" style="width: auto; margin-right: 0.5rem;"> Tech Packs</label>
-                        <label style="text-transform: none; font-size: 0.9rem;"><input type="checkbox" style="width: auto; margin-right: 0.5rem;"> Mockups</label>
-                        <label style="text-transform: none; font-size: 0.9rem;"><input type="checkbox" style="width: auto; margin-right: 0.5rem;"> Social Campaigns</label>
+                        <label style="text-transform: none; font-size: 0.9rem;"><input type="checkbox" name="services" value="logo" style="width: auto; margin-right: 0.5rem;"> Logo Concepts</label>
+                        <label style="text-transform: none; font-size: 0.9rem;"><input type="checkbox" name="services" value="tech-packs" style="width: auto; margin-right: 0.5rem;"> Tech Packs</label>
+                        <label style="text-transform: none; font-size: 0.9rem;"><input type="checkbox" name="services" value="mockups" style="width: auto; margin-right: 0.5rem;"> Mockups</label>
+                        <label style="text-transform: none; font-size: 0.9rem;"><input type="checkbox" name="services" value="social-campaigns" style="width: auto; margin-right: 0.5rem;"> Social Campaigns</label>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="budget">Monthly Budget Range</label>
-                    <select id="budget">
+                    <select id="budget" name="budget">
                         <option value="starter">$49 - $199</option>
                         <option value="growth">$200 - $499</option>
                         <option value="pro">$500+</option>
@@ -69,20 +68,22 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="notes">Tell us about your vision</label>
-                    <textarea id="notes" rows="5" placeholder="Describe the soul of your brand..."></textarea>
+                    <label for="vision">Tell us about your vision</label>
+                    <textarea id="vision" name="vision" rows="6" placeholder="Describe your brand vision, target audience, and any specific requirements..."></textarea>
                 </div>
 
-                <button type="submit" class="btn" style="width: 100%;">Initialize Studio Access</button>
+                <button type="submit" class="btn" style="width: 100%; padding: 1rem;">Initialize Studio Access</button>
+
             </form>
         </div>
     </main>
 
     <footer>
         <div class="container">
-            <div class="footer-logo">AI BRAND STUDIO</div>
-            <p class="copyright">&copy; 2026 AI Brand Studio. All Rights Reserved.</p>
+            <p class="logo">AI BRAND STUDIO</p>
+            <p style="color: var(--muted); font-size: 0.8rem;">© 2026 AI Brand Studio. All Rights Reserved.</p>
         </div>
     </footer>
+
 </body>
 </html>
